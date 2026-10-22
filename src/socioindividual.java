@@ -1,9 +1,9 @@
 import java.time.LocalDate;
 
-public class socioindividual extends socio {
+public class SocioIndividual extends Socio {
     private int anoNascimento;
 
-    public socioindividual(String nome, int numero, String email, int anoNascimento) {
+    public SocioIndividual(String nome, int numero, String email, int anoNascimento) {
         super(nome, numero, email, calcularDesconto(anoNascimento));
         this.anoNascimento = anoNascimento;
     }

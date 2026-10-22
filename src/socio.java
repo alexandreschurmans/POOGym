@@ -1,10 +1,10 @@
-public class socio {
+public class Socio {
     private String nome;
     private int numero;
     private String email;
     private double desconto; // fração: 0.10 = 10%
 
-    public socio(String nome, int numero, String email, double desconto) {
+    public Socio(String nome, int numero, String email, double desconto) {
         this.nome = nome;
         this.numero = numero;
         this.email = email;
