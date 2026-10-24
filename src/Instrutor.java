@@ -13,7 +13,6 @@ public class Instrutor {
     public String getGenero() { return genero; }
     public String getFormacao() { return formacao; }
 
-    @Override
     public String toString() {
         return nome + " (" + genero + ") | Formação: " + formacao;
     }

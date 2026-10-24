@@ -1,11 +1,8 @@
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    private static final Scanner in = new Scanner(System.in);
-    private static final Ginasio ginasio = new Ginasio();
+    private static Scanner in = new Scanner(System.in);
+    private static Ginasio ginasio = new Ginasio();
 
     public static void main(String[] args) {
         int opcao;
@@ -17,11 +14,11 @@ public class Main {
                 case 1: registarSocio(); break;
                 case 2: registarInstrutor(); break;
                 case 3: registarAtividade(); break;
-                case 4: listarSocios(); break;
-                case 5: listarAtividades(); break;
+                case 4: ginasio.listarSocios(); break;
+                case 5: ginasio.listarAtividades(); break;
                 case 6: criarMarcacao(); break;
-                case 7: listarMarcacoes(); break;
-                case 8: resumoAtividades(); break;
+                case 7: ginasio.listarMarcacoes(); break;
+                case 8: ginasio.imprimirResumo(); break;
                 case 9: maisPopular(); break;
                 case 10: valoresSocio(); break;
                 case 0: System.out.println("Até à próxima!"); break;
@@ -68,7 +65,7 @@ public class Main {
         } else {
             String empresa = lerTexto("Nome da empresa: ");
             String nif = lerTexto("NIF da empresa: ");
-            socio = new Socioempresa(nome, numero, email, empresa, nif);
+            socio = new SocioEmpresa(nome, numero, email, empresa, nif);
         }
         ginasio.registarSocio(socio);
         System.out.println("Sócio registado: " + socio);
@@ -85,8 +82,7 @@ public class Main {
 
     // ---------- 3. Registar atividade ----------
     private static void registarAtividade() {
-        ArrayList<Instrutor> instrutores = ginasio.getInstrutores();
-        if (instrutores.isEmpty()) {
+        if (ginasio.getNumInstrutores() == 0) {
             System.out.println("Registe primeiro um instrutor.");
             return;
         }
@@ -100,73 +96,49 @@ public class Main {
         String nome = lerTexto("Nome da atividade: ");
 
         System.out.println("Instrutores:");
-        for (int i = 0; i < instrutores.size(); i++) {
-            System.out.println("  " + (i + 1) + " - " + instrutores.get(i));
-        }
+        ginasio.listarInstrutores();
         int idx = lerInt("Instrutor (n.º): ") - 1;
-        if (idx < 0 || idx >= instrutores.size()) {
+        if (idx < 0 || idx >= ginasio.getNumInstrutores()) {
             System.out.println("Instrutor inválido.");
             return;
         }
-        Instrutor instrutor = instrutores.get(idx);
+        Instrutor instrutor = ginasio.getInstrutor(idx);
 
-        LocalDateTime inicio = lerDataHora("Data e hora de início (dd/MM/yyyy HH:mm): ");
+        String inicio = lerDataHora("Data e hora de início (dd/MM/yyyy HH:mm): ");
         int duracao = lerInt("Duração (minutos): ");
 
         if (tipo == 1) {
             System.out.println("Modalidades:");
-            for (int i = 0; i < Aulagrupo.MODALIDADES.length; i++) {
-                System.out.printf("  %d - %s (%.2f €)%n", i + 1, Aulagrupo.MODALIDADES[i], Aulagrupo.CUSTOS[i]);
+            for (int i = 0; i < AulaGrupo.getNumModalidades(); i++) {
+                System.out.println("  " + (i + 1) + " - " + AulaGrupo.getNomeModalidade(i)
+                        + " (" + Formato.euros(AulaGrupo.getCustoModalidade(i)) + ")");
             }
             int m = lerInt("Modalidade: ") - 1;
-            if (m < 0 || m >= Aulagrupo.MODALIDADES.length) {
+            if (m < 0 || m >= AulaGrupo.getNumModalidades()) {
                 System.out.println("Modalidade inválida.");
                 return;
             }
             int capacidade = lerInt("Capacidade máxima: ");
-            ginasio.registarAtividade(new Aulagrupo(nome, instrutor, inicio, duracao,
-                    Aulagrupo.MODALIDADES[m], capacidade));
+            ginasio.registarAtividade(new AulaGrupo(nome, instrutor, inicio, duracao, m, capacidade));
         } else {
             System.out.println("Níveis:");
-            for (int i = 0; i < Sessaopt.NIVEIS.length; i++) {
-                System.out.printf("  %d - %s (%.2f €)%n", i + 1, Sessaopt.NIVEIS[i], Sessaopt.CUSTOS[i]);
+            for (int i = 0; i < SessaoPT.getNumNiveis(); i++) {
+                System.out.println("  " + (i + 1) + " - " + SessaoPT.getNomeNivel(i)
+                        + " (" + Formato.euros(SessaoPT.getCustoNivel(i)) + ")");
             }
             int n = lerInt("Nível: ") - 1;
-            if (n < 0 || n >= Sessaopt.NIVEIS.length) {
+            if (n < 0 || n >= SessaoPT.getNumNiveis()) {
                 System.out.println("Nível inválido.");
                 return;
             }
-            ginasio.registarAtividade(new Sessaopt(nome, instrutor, inicio, duracao, Sessaopt.NIVEIS[n]));
+            ginasio.registarAtividade(new SessaoPT(nome, instrutor, inicio, duracao, n));
         }
         System.out.println("Atividade registada.");
     }
 
-    // ---------- 4. Listar sócios ----------
-    private static void listarSocios() {
-        ArrayList<Socio> socios = ginasio.getSocios();
-        if (socios.isEmpty()) {
-            System.out.println("Não existem sócios.");
-            return;
-        }
-        for (Socio s : socios) System.out.println(s);
-    }
-
-    // ---------- 5. Listar atividades ----------
-    private static void listarAtividades() {
-        ArrayList<Atividade> atividades = ginasio.getAtividades();
-        if (atividades.isEmpty()) {
-            System.out.println("Não existem atividades.");
-            return;
-        }
-        for (int i = 0; i < atividades.size(); i++) {
-            System.out.println((i + 1) + " - " + atividades.get(i));
-        }
-    }
-
     // ---------- 6. Criar marcação ----------
     private static void criarMarcacao() {
-        ArrayList<Atividade> atividades = ginasio.getAtividades();
-        if (ginasio.getSocios().isEmpty() || atividades.isEmpty()) {
+        if (ginasio.getNumSocios() == 0 || ginasio.getNumAtividades() == 0) {
             System.out.println("É necessário haver pelo menos um sócio e uma atividade.");
             return;
         }
@@ -176,40 +148,18 @@ public class Main {
             System.out.println("Sócio não encontrado.");
             return;
         }
-        listarAtividades();
+        ginasio.listarAtividades();
         int idx = lerInt("Atividade (n.º): ") - 1;
-        if (idx < 0 || idx >= atividades.size()) {
+        if (idx < 0 || idx >= ginasio.getNumAtividades()) {
             System.out.println("Atividade inválida.");
             return;
         }
-        LocalDateTime dataHora = lerDataHora("Data e hora da marcação (dd/MM/yyyy HH:mm): ");
+        String dataHora = lerDataHora("Data e hora da marcação (dd/MM/yyyy HH:mm): ");
 
-        Marcacao m = ginasio.criarMarcacao(socio, atividades.get(idx), dataHora);
-        if (m == null) {
-            System.out.println("Aula de grupo cheia: não é possível criar a marcação.");
-        } else {
-            System.out.printf("Marcação criada. Custo base: %.2f € | Desconto: %.0f%% | Custo final: %.2f €%n",
-                    m.getCustoBase(), socio.getDesconto() * 100, m.getCustoFinal());
-        }
-    }
-
-    // ---------- 7. Listar marcações ----------
-    private static void listarMarcacoes() {
-        ArrayList<Marcacao> marcacoes = ginasio.getMarcacoes();
-        if (marcacoes.isEmpty()) {
-            System.out.println("Não existem marcações.");
-            return;
-        }
-        for (Marcacao m : marcacoes) System.out.println(m);
-        System.out.printf("Total faturado: %.2f €%n", ginasio.totalFaturado());
-    }
-
-    // ---------- 8. Resumo de atividades ----------
-    private static void resumoAtividades() {
-        System.out.println("Sócios individuais: " + ginasio.contarSociosIndividuais());
-        System.out.println("Sócios empresa: " + ginasio.contarSociosEmpresa());
-        System.out.println("Aulas de grupo: " + ginasio.contarAulasGrupo());
-        System.out.println("Sessões de PT: " + ginasio.contarSessoesPT());
+        Marcacao m = ginasio.criarMarcacao(socio, ginasio.getAtividade(idx), dataHora);
+        System.out.println("Marcação criada. Custo base: " + Formato.euros(m.getCustoBase())
+                + " | Desconto: " + Math.round(socio.getDesconto() * 100) + "%"
+                + " | Custo final: " + Formato.euros(m.getCustoFinal()));
     }
 
     // ---------- 9. Mais popular ----------
@@ -232,8 +182,8 @@ public class Main {
             return;
         }
         System.out.println(socio);
-        System.out.printf("Total gasto: %.2f €%n", ginasio.totalGasto(socio));
-        System.out.printf("Total poupado com o desconto: %.2f €%n", ginasio.totalPoupado(socio));
+        System.out.println("Total gasto: " + Formato.euros(ginasio.totalGasto(socio)));
+        System.out.println("Total poupado com o desconto: " + Formato.euros(ginasio.totalPoupado(socio)));
     }
 
     // ---------- Leitura de dados ----------
@@ -242,25 +192,37 @@ public class Main {
         return in.nextLine().trim();
     }
 
+    // Lê um número inteiro positivo; repete a pergunta se o texto não for válido
     private static int lerInt(String msg) {
         while (true) {
-            System.out.print(msg);
-            try {
-                return Integer.parseInt(in.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Valor inválido. Introduza um número inteiro.");
+            String texto = lerTexto(msg);
+            boolean valido = texto.length() > 0 && texto.length() <= 9;
+            for (int i = 0; i < texto.length(); i++) {
+                char c = texto.charAt(i);
+                if (c < '0' || c > '9') {
+                    valido = false;
+                }
             }
+            if (valido) {
+                int valor = 0;
+                for (int i = 0; i < texto.length(); i++) {
+                    valor = valor * 10 + (texto.charAt(i) - '0');
+                }
+                return valor;
+            }
+            System.out.println("Valor inválido. Introduza um número inteiro positivo.");
         }
     }
 
-    private static LocalDateTime lerDataHora(String msg) {
+    // Lê uma data e hora no formato dd/MM/yyyy HH:mm (verifica só o formato)
+    private static String lerDataHora(String msg) {
         while (true) {
-            System.out.print(msg);
-            try {
-                return LocalDateTime.parse(in.nextLine().trim(), Atividade.FORMATO);
-            } catch (DateTimeParseException e) {
-                System.out.println("Formato inválido. Exemplo: 25/10/2026 18:30");
+            String t = lerTexto(msg);
+            if (t.length() == 16 && t.charAt(2) == '/' && t.charAt(5) == '/'
+                    && t.charAt(10) == ' ' && t.charAt(13) == ':') {
+                return t;
             }
+            System.out.println("Formato inválido. Exemplo: 25/10/2026 18:30");
         }
     }
 }

@@ -1,13 +1,12 @@
-import java.time.LocalDateTime;
 
 public class Marcacao {
     private Socio socio;
     private Atividade atividade;
-    private LocalDateTime dataHora;
+    private String dataHora; // formato dd/MM/yyyy HH:mm
     private double custoBase;
     private double custoFinal;
 
-    public Marcacao(Socio socio, Atividade atividade, LocalDateTime dataHora) {
+    public Marcacao(Socio socio, Atividade atividade, String dataHora) {
         this.socio = socio;
         this.atividade = atividade;
         this.dataHora = dataHora;
@@ -17,15 +16,17 @@ public class Marcacao {
 
     public Socio getSocio() { return socio; }
     public Atividade getAtividade() { return atividade; }
-    public LocalDateTime getDataHora() { return dataHora; }
+    public String getDataHora() { return dataHora; }
     public double getCustoBase() { return custoBase; }
     public double getCustoFinal() { return custoFinal; }
+
+    /** Valor poupado graças ao desconto (custo base - custo final) */
     public double getPoupanca() { return custoBase - custoFinal; }
 
-    @Override
     public String toString() {
-        return String.format("%s | Sócio: %s (n.º %d) | Atividade: %s | custo base: %.2f € | custo final: %.2f €",
-                dataHora.format(Atividade.FORMATO), socio.getNome(), socio.getNumero(),
-                atividade.getNome(), custoBase, custoFinal);
+        return dataHora + " | Sócio: " + socio.getNome() + " (n.º " + socio.getNumero()
+                + ") | Atividade: " + atividade.getNome()
+                + " | custo base: " + Formato.euros(custoBase)
+                + " | custo final: " + Formato.euros(custoFinal);
     }
 }

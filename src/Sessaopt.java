@@ -1,27 +1,25 @@
-import java.time.LocalDateTime;
 
-public class Sessaopt extends Atividade {
-    public static final String[] NIVEIS = {"Iniciação", "Intermédio", "Avançado"};
-    public static final double[] CUSTOS = {18.00, 22.00, 28.00};
+public class SessaoPT extends Atividade {
+    private static String[] niveis = {"Iniciação", "Intermédio", "Avançado"};
+    private static double[] custos = {18.00, 22.00, 28.00};
 
     private String nivel;
 
-    public Sessaopt(String nome, Instrutor instrutor, LocalDateTime inicio, int duracaoMinutos,
-                    String nivel) {
-        super(nome, instrutor, inicio, duracaoMinutos, custoDoNivel(nivel));
-        this.nivel = nivel;
+    public SessaoPT(String nome, Instrutor instrutor, String inicio, int duracaoMinutos,
+                    int indiceNivel) {
+        super(nome, instrutor, inicio, duracaoMinutos, custos[indiceNivel], "Sessão PT");
+        this.nivel = niveis[indiceNivel];
     }
 
-    private static double custoDoNivel(String nivel) {
-        for (int i = 0; i < NIVEIS.length; i++) {
-            if (NIVEIS[i].equals(nivel)) return CUSTOS[i];
-        }
-        return 0;
-    }
+    /** Número de níveis disponíveis */
+    public static int getNumNiveis() { return niveis.length; }
+
+    public static String getNomeNivel(int indice) { return niveis[indice]; }
+
+    public static double getCustoNivel(int indice) { return custos[indice]; }
 
     public String getNivel() { return nivel; }
 
-    @Override
     public String toString() {
         return "[Personal Training - " + nivel + "] " + super.toString();
     }
