@@ -1,11 +1,11 @@
 
-public class SessaoPT extends Atividade {
+public class Sessaopt extends Atividade {
     private static String[] niveis = {"Iniciação", "Intermédio", "Avançado"};
     private static double[] custos = {18.00, 22.00, 28.00};
 
     private String nivel;
 
-    public SessaoPT(String nome, Instrutor instrutor, String inicio, int duracaoMinutos,
+    public Sessaopt(String nome, Instrutor instrutor, String inicio, int duracaoMinutos,
                     int indiceNivel) {
         super(nome, instrutor, inicio, duracaoMinutos, custos[indiceNivel], "Sessão PT");
         this.nivel = niveis[indiceNivel];

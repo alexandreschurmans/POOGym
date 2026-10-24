@@ -1,4 +1,4 @@
-public class AulaGrupo extends Atividade {
+public class Aulagrupo extends Atividade {
     private static String[] modalidades = {"Yoga", "Spinning", "Zumba", "CrossFit"};
     private static double[] custos = {8.00, 9.00, 8.50, 12.00};
 
@@ -14,7 +14,7 @@ public class AulaGrupo extends Atividade {
      * @param indiceModalidade Índice da modalidade (0 a 3)
      * @param capacidadeMaxima Número máximo de participantes
      */
-    public AulaGrupo(String nome, Instrutor instrutor, String inicio, int duracaoMinutos,
+    public Aulagrupo(String nome, Instrutor instrutor, String inicio, int duracaoMinutos,
                      int indiceModalidade, int capacidadeMaxima) {
         super(nome, instrutor, inicio, duracaoMinutos, custos[indiceModalidade], "Aula de grupo");
         this.modalidade = modalidades[indiceModalidade];

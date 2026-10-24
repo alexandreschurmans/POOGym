@@ -65,7 +65,7 @@ public class Main {
         } else {
             String empresa = lerTexto("Nome da empresa: ");
             String nif = lerTexto("NIF da empresa: ");
-            socio = new SocioEmpresa(nome, numero, email, empresa, nif);
+            socio = new Socioempresa(nome, numero, email, empresa, nif);
         }
         ginasio.registarSocio(socio);
         System.out.println("Sócio registado: " + socio);
@@ -109,29 +109,29 @@ public class Main {
 
         if (tipo == 1) {
             System.out.println("Modalidades:");
-            for (int i = 0; i < AulaGrupo.getNumModalidades(); i++) {
-                System.out.println("  " + (i + 1) + " - " + AulaGrupo.getNomeModalidade(i)
-                        + " (" + Formato.euros(AulaGrupo.getCustoModalidade(i)) + ")");
+            for (int i = 0; i < Aulagrupo.getNumModalidades(); i++) {
+                System.out.println("  " + (i + 1) + " - " + Aulagrupo.getNomeModalidade(i)
+                        + " (" + Formato.euros(Aulagrupo.getCustoModalidade(i)) + ")");
             }
             int m = lerInt("Modalidade: ") - 1;
-            if (m < 0 || m >= AulaGrupo.getNumModalidades()) {
+            if (m < 0 || m >= Aulagrupo.getNumModalidades()) {
                 System.out.println("Modalidade inválida.");
                 return;
             }
             int capacidade = lerInt("Capacidade máxima: ");
-            ginasio.registarAtividade(new AulaGrupo(nome, instrutor, inicio, duracao, m, capacidade));
+            ginasio.registarAtividade(new Aulagrupo(nome, instrutor, inicio, duracao, m, capacidade));
         } else {
             System.out.println("Níveis:");
-            for (int i = 0; i < SessaoPT.getNumNiveis(); i++) {
-                System.out.println("  " + (i + 1) + " - " + SessaoPT.getNomeNivel(i)
-                        + " (" + Formato.euros(SessaoPT.getCustoNivel(i)) + ")");
+            for (int i = 0; i < Sessaopt.getNumNiveis(); i++) {
+                System.out.println("  " + (i + 1) + " - " + Sessaopt.getNomeNivel(i)
+                        + " (" + Formato.euros(Sessaopt.getCustoNivel(i)) + ")");
             }
             int n = lerInt("Nível: ") - 1;
-            if (n < 0 || n >= SessaoPT.getNumNiveis()) {
+            if (n < 0 || n >= Sessaopt.getNumNiveis()) {
                 System.out.println("Nível inválido.");
                 return;
             }
-            ginasio.registarAtividade(new SessaoPT(nome, instrutor, inicio, duracao, n));
+            ginasio.registarAtividade(new Sessaopt(nome, instrutor, inicio, duracao, n));
         }
         System.out.println("Atividade registada.");
     }
