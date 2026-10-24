@@ -11,6 +11,6 @@ public class Formato {
         if (resto < 10) {
             zero = "0";
         }
-        return inteiros + "," + zero + resto + " €";
+        return inteiros + "," + zero + resto + " euros";
     }
 }
