@@ -1,3 +1,8 @@
+/**
+ * Representa uma aula de grupo do ginásio.
+ * Além dos dados de qualquer atividade, indica a modalidade
+ * (Yoga, Spinning, Zumba ou CrossFit) e a capacidade máxima de participantes.
+ */
 public class Aulagrupo extends Atividade {
     private static String[] modalidades = {"Yoga", "Spinning", "Zumba", "CrossFit"};
     private static double[] custos = {8.00, 9.00, 8.50, 12.00};
@@ -36,11 +41,18 @@ public class Aulagrupo extends Atividade {
      */
     public static double getCustoModalidade(int indice) { return custos[indice]; }
 
+    /** @return Nome da modalidade desta aula */
     public String getModalidade() { return modalidade; }
+
+    /** @return Número máximo de participantes */
     public int getCapacidadeMaxima() { return capacidadeMaxima; }
 
-    public String toString() {
-        return "[Aula de grupo - " + modalidade + "] " + super.toString()
-                + " | capacidade: " + capacidadeMaxima;
+    /**
+     * Devolve os dados completos da aula de grupo.
+     * @return Dados comuns da atividade, modalidade e capacidade
+     */
+    public String getDetalhes() {
+        return "[Aula de grupo - " + modalidade + "] " + getInformacaoBase()
+            + " | capacidade: " + capacidadeMaxima;
     }
 }

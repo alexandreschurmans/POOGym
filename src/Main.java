@@ -1,9 +1,16 @@
 import java.util.Scanner;
 
+/**
+ * Classe principal do POOGym: apresenta o menu e interage com o utilizador.
+ */
 public class Main {
     private static Scanner in = new Scanner(System.in);
     private static Ginasio ginasio = new Ginasio();
-    
+
+    /**
+     * Ponto de entrada da aplicação.
+     * @param args Argumentos da linha de comandos (não utilizados)
+     */
     public static void main(String[] args) {
         carregarDados();
         int opcao;
@@ -28,16 +35,17 @@ public class Main {
         } while (opcao != 0);
     }
 
-        private static void carregarDados() {
+    // Dados de demonstração: 6 sócios, 3 instrutores, 8 atividades e 6 marcações
+    private static void carregarDados() {
         // Sócios individuais (10%, 0% e 15% de desconto)
-        ginasio.registarSocio(new SocioIndividual("Ana Silva", 1, "ana@mail.pt", 2012));
-        ginasio.registarSocio(new SocioIndividual("Bruno Matos", 2, "bruno@mail.pt", 1990));
-        ginasio.registarSocio(new SocioIndividual("Carlos Pinto", 3, "carlos@mail.pt", 1955));
+        ginasio.registarSocioIndividual(new SocioIndividual("Ana Silva", 1, "ana@mail.pt", 2012));
+        ginasio.registarSocioIndividual(new SocioIndividual("Bruno Matos", 2, "bruno@mail.pt", 1990));
+        ginasio.registarSocioIndividual(new SocioIndividual("Carlos Pinto", 3, "carlos@mail.pt", 1955));
 
         // Sócios empresa (20% de desconto)
-        ginasio.registarSocio(new Socioempresa("Diana Rocha", 4, "diana@mail.pt", "TechCoimbra", "501234567"));
-        ginasio.registarSocio(new Socioempresa("Eduardo Lopes", 5, "eduardo@mail.pt", "Mondego Lda", "502345678"));
-        ginasio.registarSocio(new Socioempresa("Filipa Neves", 6, "filipa@mail.pt", "Beira Software", "503456789"));
+        ginasio.registarSocioEmpresa(new Socioempresa("Diana Rocha", 4, "diana@mail.pt", "TechCoimbra", "501234567"));
+        ginasio.registarSocioEmpresa(new Socioempresa("Eduardo Lopes", 5, "eduardo@mail.pt", "Mondego Lda", "502345678"));
+        ginasio.registarSocioEmpresa(new Socioempresa("Filipa Neves", 6, "filipa@mail.pt", "Beira Software", "503456789"));
 
         // Instrutores
         ginasio.registarInstrutor(new Instrutor("Rui Costa", "M", "Licenciatura em Desporto; Curso de Yoga"));
@@ -48,16 +56,16 @@ public class Main {
         Instrutor tiago = ginasio.getInstrutor(2);
 
         // Aulas de grupo (modalidade: 0 Yoga, 1 Spinning, 2 Zumba, 3 CrossFit)
-        ginasio.registarAtividade(new Aulagrupo("Yoga manhã", rui, "26/10/2026 09:00", 60, 0, 15));
-        ginasio.registarAtividade(new Aulagrupo("Spinning energia", marta, "26/10/2026 18:30", 45, 1, 20));
-        ginasio.registarAtividade(new Aulagrupo("Zumba festa", marta, "27/10/2026 19:00", 50, 2, 25));
-        ginasio.registarAtividade(new Aulagrupo("CrossFit intenso", tiago, "27/10/2026 07:30", 60, 3, 12));
-        ginasio.registarAtividade(new Aulagrupo("Yoga tarde", rui, "28/10/2026 17:00", 60, 0, 15));
+        ginasio.registarAulaGrupo(new Aulagrupo("Yoga manhã", rui, "26/10/2026 09:00", 60, 0, 15));
+        ginasio.registarAulaGrupo(new Aulagrupo("Spinning energia", marta, "26/10/2026 18:30", 45, 1, 20));
+        ginasio.registarAulaGrupo(new Aulagrupo("Zumba festa", marta, "27/10/2026 19:00", 50, 2, 25));
+        ginasio.registarAulaGrupo(new Aulagrupo("CrossFit intenso", tiago, "27/10/2026 07:30", 60, 3, 12));
+        ginasio.registarAulaGrupo(new Aulagrupo("Yoga tarde", rui, "28/10/2026 17:00", 60, 0, 15));
 
         // Sessões de personal training (nível: 0 Iniciação, 1 Intermédio, 2 Avançado)
-        ginasio.registarAtividade(new Sessaopt("PT iniciação", tiago, "28/10/2026 10:00", 45, 0));
-        ginasio.registarAtividade(new Sessaopt("PT intermédio", rui, "29/10/2026 11:00", 45, 1));
-        ginasio.registarAtividade(new Sessaopt("PT avançado", tiago, "29/10/2026 16:00", 60, 2));
+        ginasio.registarSessaoPT(new Sessaopt("PT iniciação", tiago, "28/10/2026 10:00", 45, 0));
+        ginasio.registarSessaoPT(new Sessaopt("PT intermédio", rui, "29/10/2026 11:00", 45, 1));
+        ginasio.registarSessaoPT(new Sessaopt("PT avançado", tiago, "29/10/2026 16:00", 60, 2));
 
         // Marcações (a atividade 0 fica com 3, para a opção "Mais popular")
         ginasio.criarMarcacao(ginasio.procurarSocio(1), ginasio.getAtividade(0), "25/10/2026 10:00");
@@ -99,17 +107,18 @@ public class Main {
         }
         String email = lerTexto("E-mail: ");
 
-        Socio socio;
         if (tipo == 1) {
             int ano = lerInt("Ano de nascimento: ");
-            socio = new SocioIndividual(nome, numero, email, ano);
+            SocioIndividual socio = new SocioIndividual(nome, numero, email, ano);
+            ginasio.registarSocioIndividual(socio);
+            System.out.println("Sócio registado: " + socio.getDetalhes());
         } else {
             String empresa = lerTexto("Nome da empresa: ");
             String nif = lerTexto("NIF da empresa: ");
-            socio = new Socioempresa(nome, numero, email, empresa, nif);
+            Socioempresa socio = new Socioempresa(nome, numero, email, empresa, nif);
+            ginasio.registarSocioEmpresa(socio);
+            System.out.println("Sócio registado: " + socio.getDetalhes());
         }
-        ginasio.registarSocio(socio);
-        System.out.println("Sócio registado: " + socio);
     }
 
     // ---------- 2. Registar instrutor ----------
@@ -160,7 +169,7 @@ public class Main {
                 return;
             }
             int capacidade = lerInt("Capacidade máxima: ");
-            ginasio.registarAtividade(new Aulagrupo(nome, instrutor, inicio, duracao, m, capacidade));
+            ginasio.registarAulaGrupo(new Aulagrupo(nome, instrutor, inicio, duracao, m, capacidade));
         } else {
             System.out.println("Níveis:");
             for (int i = 0; i < Sessaopt.getNumNiveis(); i++) {
@@ -172,7 +181,7 @@ public class Main {
                 System.out.println("Nível inválido.");
                 return;
             }
-            ginasio.registarAtividade(new Sessaopt(nome, instrutor, inicio, duracao, n));
+            ginasio.registarSessaoPT(new Sessaopt(nome, instrutor, inicio, duracao, n));
         }
         System.out.println("Atividade registada.");
     }
@@ -210,7 +219,7 @@ public class Main {
             System.out.println("Ainda não existem marcações.");
         } else {
             System.out.println("Atividade mais popular (" + ginasio.contarMarcacoes(a) + " marcações):");
-            System.out.println(a);
+            System.out.println(a.getInformacaoBase());
         }
     }
 
@@ -222,7 +231,7 @@ public class Main {
             System.out.println("Sócio não encontrado.");
             return;
         }
-        System.out.println(socio);
+        System.out.println(socio.getInformacaoBase());
         System.out.println("Total gasto: " + Formato.euros(ginasio.totalGasto(socio)));
         System.out.println("Total poupado com o desconto: " + Formato.euros(ginasio.totalPoupado(socio)));
     }

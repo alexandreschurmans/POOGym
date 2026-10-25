@@ -1,3 +1,7 @@
+/**
+ * Representa uma atividade do ginásio (aula de grupo ou sessão de personal training).
+ * Guarda o nome, o instrutor responsável, a data e hora de início, a duração e o custo base.
+ */
 public class Atividade {
     private String nome;
     private Instrutor instrutor;
@@ -25,14 +29,29 @@ public class Atividade {
         this.tipo = tipo;
     }
 
+    /** @return Nome da atividade */
     public String getNome() { return nome; }
+
+    /** @return Instrutor responsável pela atividade */
     public Instrutor getInstrutor() { return instrutor; }
+
+    /** @return Data e hora de início (dd/MM/yyyy HH:mm) */
     public String getInicio() { return inicio; }
+
+    /** @return Duração da atividade em minutos */
     public int getDuracaoMinutos() { return duracaoMinutos; }
+
+    /** @return Custo base da atividade em euros */
     public double getCustoBase() { return custoBase; }
+
+    /** @return Tipo de atividade ("Aula de grupo" ou "Sessão PT") */
     public String getTipo() { return tipo; }
 
-    public String toString() {
+    /**
+     * Devolve o texto com os dados comuns a todas as atividades.
+     * @return Nome, instrutor, início, duração e custo base
+     */
+    public String getInformacaoBase() {
         return nome + " | Instrutor: " + instrutor.getNome() + " | " + inicio
                 + " | " + duracaoMinutos + " min | custo base: " + Formato.euros(custoBase);
     }
