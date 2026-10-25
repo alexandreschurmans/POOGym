@@ -3,8 +3,9 @@ import java.util.Scanner;
 public class Main {
     private static Scanner in = new Scanner(System.in);
     private static Ginasio ginasio = new Ginasio();
-
+    
     public static void main(String[] args) {
+        carregarDados();
         int opcao;
         do {
             mostrarMenu();
@@ -25,6 +26,46 @@ public class Main {
                 default: System.out.println("Opção inválida.");
             }
         } while (opcao != 0);
+    }
+
+        private static void carregarDados() {
+        // Sócios individuais (10%, 0% e 15% de desconto)
+        ginasio.registarSocio(new SocioIndividual("Ana Silva", 1, "ana@mail.pt", 2012));
+        ginasio.registarSocio(new SocioIndividual("Bruno Matos", 2, "bruno@mail.pt", 1990));
+        ginasio.registarSocio(new SocioIndividual("Carlos Pinto", 3, "carlos@mail.pt", 1955));
+
+        // Sócios empresa (20% de desconto)
+        ginasio.registarSocio(new Socioempresa("Diana Rocha", 4, "diana@mail.pt", "TechCoimbra", "501234567"));
+        ginasio.registarSocio(new Socioempresa("Eduardo Lopes", 5, "eduardo@mail.pt", "Mondego Lda", "502345678"));
+        ginasio.registarSocio(new Socioempresa("Filipa Neves", 6, "filipa@mail.pt", "Beira Software", "503456789"));
+
+        // Instrutores
+        ginasio.registarInstrutor(new Instrutor("Rui Costa", "M", "Licenciatura em Desporto; Curso de Yoga"));
+        ginasio.registarInstrutor(new Instrutor("Marta Dias", "F", "Mestrado em Treino Desportivo; Instrutora de Spinning"));
+        ginasio.registarInstrutor(new Instrutor("Tiago Faria", "M", "Personal Trainer certificado; Curso de CrossFit"));
+        Instrutor rui = ginasio.getInstrutor(0);
+        Instrutor marta = ginasio.getInstrutor(1);
+        Instrutor tiago = ginasio.getInstrutor(2);
+
+        // Aulas de grupo (modalidade: 0 Yoga, 1 Spinning, 2 Zumba, 3 CrossFit)
+        ginasio.registarAtividade(new Aulagrupo("Yoga manhã", rui, "26/10/2026 09:00", 60, 0, 15));
+        ginasio.registarAtividade(new Aulagrupo("Spinning energia", marta, "26/10/2026 18:30", 45, 1, 20));
+        ginasio.registarAtividade(new Aulagrupo("Zumba festa", marta, "27/10/2026 19:00", 50, 2, 25));
+        ginasio.registarAtividade(new Aulagrupo("CrossFit intenso", tiago, "27/10/2026 07:30", 60, 3, 12));
+        ginasio.registarAtividade(new Aulagrupo("Yoga tarde", rui, "28/10/2026 17:00", 60, 0, 15));
+
+        // Sessões de personal training (nível: 0 Iniciação, 1 Intermédio, 2 Avançado)
+        ginasio.registarAtividade(new Sessaopt("PT iniciação", tiago, "28/10/2026 10:00", 45, 0));
+        ginasio.registarAtividade(new Sessaopt("PT intermédio", rui, "29/10/2026 11:00", 45, 1));
+        ginasio.registarAtividade(new Sessaopt("PT avançado", tiago, "29/10/2026 16:00", 60, 2));
+
+        // Marcações (a atividade 0 fica com 3, para a opção "Mais popular")
+        ginasio.criarMarcacao(ginasio.procurarSocio(1), ginasio.getAtividade(0), "25/10/2026 10:00");
+        ginasio.criarMarcacao(ginasio.procurarSocio(2), ginasio.getAtividade(0), "25/10/2026 10:30");
+        ginasio.criarMarcacao(ginasio.procurarSocio(3), ginasio.getAtividade(0), "25/10/2026 11:00");
+        ginasio.criarMarcacao(ginasio.procurarSocio(4), ginasio.getAtividade(5), "25/10/2026 12:00");
+        ginasio.criarMarcacao(ginasio.procurarSocio(5), ginasio.getAtividade(2), "25/10/2026 14:00");
+        ginasio.criarMarcacao(ginasio.procurarSocio(1), ginasio.getAtividade(6), "25/10/2026 15:00");
     }
 
     private static void mostrarMenu() {
